@@ -8,7 +8,7 @@ const slides = [
         id: 1,
         title: "Summer Sale Collections",
         description: "Sale! Up to 50% off!",
-        img: "https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg?auto=compress&cs=tinysrgb&w=800",
+        img: "https://images.pexels.com/photos/16715938/pexels-photo-16715938/free-photo-of-a-young-lady-with-a-hat-on-her-head.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
         url: "/",
         bg: "bg-gradient-to-r from-yellow-50 to-pink-50",
     },
@@ -16,7 +16,7 @@ const slides = [
         id: 2,
         title: "Winter Sale Collections",
         description: "Sale! Up to 50% off!",
-        img: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg?auto=compress&cs=tinysrgb&w=800",
+        img: "https://images.pexels.com/photos/15759383/pexels-photo-15759383/free-photo-of-portrait-of-woman-on-winter-day.jpeg?auto=compress&cs=tinysrgb&w=600",
         url: "/",
         bg: "bg-gradient-to-r from-pink-50 to-blue-50",
     },
@@ -24,7 +24,7 @@ const slides = [
         id: 3,
         title: "Spring Sale Collections",
         description: "Sale! Up to 50% off!",
-        img: "https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=800",
+        img: "https://images.pexels.com/photos/9218538/pexels-photo-9218538.jpeg?auto=compress&cs=tinysrgb&w=600",
         url: "/",
         bg: "bg-gradient-to-r from-blue-50 to-yellow-50",
     },
@@ -36,11 +36,11 @@ export const Slider = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-        }, 5000);
+        }, 10000);
         return () => clearInterval(interval);
     }, []);
 
-  
+
     return (
         <div className="relative h-[calc(100vh-80px)] overflow-hidden">
             {/* Slides */}
@@ -62,7 +62,7 @@ export const Slider = () => {
                                 </button>
                             </Link>
                         </div>
-                        <div className="relative xl:w-1/2">
+                      <div className="relative h-64 sm:h-full w-full xl:w-1/2">
                             <Image
                                 src={slide.img}
                                 alt={slide.title}
@@ -80,13 +80,12 @@ export const Slider = () => {
                 {slides.map((_, index) => (
                     <div
                         key={index}
-                        className={`w-4 h-4 rounded-full cursor-pointer transition-all duration-300 ${
-                            current === index ? 'bg-black scale-125' : 'bg-gray-400'
-                        }`}
+                        className={`w-4 h-4 rounded-full cursor-pointer transition-all duration-300 ${current === index ? 'bg-black scale-125' : 'bg-gray-400'
+                            }`}
                         onClick={() => setCurrent(index)}
                     ></div>
                 ))}
-            </div>     
+            </div>
         </div>
     );
 };
