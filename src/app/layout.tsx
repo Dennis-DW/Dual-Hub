@@ -7,7 +7,7 @@ import { Footer } from "@/components/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: " Dual Hub",
+  title: "Dual Hub",
   description: "A complete e-commerce application with Next.js and Wix",
 };
 
@@ -18,11 +18,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <Navbar/>
-        {children}
-        <Footer/>
-        </body>
+      <body className={`${inter.className} overflow-x-hidden`}>
+        <Navbar />
+        <main>{children}</main>
+        <Footer />
+      </body>
     </html>
   );
 }

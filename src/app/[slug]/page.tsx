@@ -1,7 +1,14 @@
+'use client'
+import { ProductsImg } from '@/components/ProductsImg'
 import React from 'react'
 
 export default function SinglePage() {
   return (
-    <div>SinglePage</div>
+    <div className='px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 relative flex flex-col lg:flex-row gap-16 '>
+      <div className='w-full lg:w-1/2 lg:sticky top-20 h-max'>
+        <ProductsImg />
+      </div>
+      <div className='w-full lg:w-1/2 flex flex-col gap-6'></div>
+    </div>
   )
 }
