@@ -1,25 +1,45 @@
 import { ProductList } from "@/components/ProductList"
 import { Slider } from "@/components/Slider"
 import { CategoryList } from "@/components/CategoryList"
+import { Suspense } from "react"
+import { LoadingFallback } from "@/components/ LoadingFallback"
 
-const HomePage = () => {
+
+
+const HomePage = async () => {
   return (
-    <div className=''>
+    <main className="min-h-screen">
       <Slider />
-      <div className=" mt-24 px-4 md:px-8 lg:px-16 xl:32 2xl:px-64">
-        <h1 className="text-2xl">Feaure Wear</h1>
-        <ProductList />
-      </div>
-      <div className=" mt-24">
-        <h1 className="text-2xl mb-12 px-4 md:px-8 lg:px-16 xl:32 2xl:px-64">Categories</h1>
-        <CategoryList />
-      </div>
-      <div className=" mt-24 px-4 md:px-8 lg:px-16 xl:32 2xl:px-64">
-        <h1 className="text-2xl">New Clothing</h1>
-        <ProductList />
-      </div>
-    </div>
+      <section className="mt-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
+        <h1 className="text-2xl font-bold">Featured Wear</h1>
+        <Suspense fallback={<LoadingFallback />}>
+          <ProductList 
+            categoryId={process.env.NEXT_PUBLIC_FEATURED_CLOTHES!} 
+            limit={4} 
+          />
+        </Suspense>
+      </section>
+
+      <section className="mt-24">
+        <h2 className="text-2xl font-bold mb-12 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
+          Categories
+        </h2>
+        <Suspense fallback={<LoadingFallback />}>
+          <CategoryList />
+        </Suspense>
+      </section>
+
+      <section className="mt-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
+        <h2 className="text-2xl font-bold">New Clothing</h2>
+        <Suspense fallback={<LoadingFallback />}>
+          <ProductList 
+            categoryId={process.env.NEXT_PUBLIC_NEW_CLOTHES!} 
+            limit={8}
+          />
+        </Suspense>
+      </section>
+    </main>
   )
 }
 
-export default HomePage
+export default HomePage;

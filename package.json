@@ -9,14 +9,20 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/dompurify": "^3.2.0",
     "@wix/sdk": "^1.15.16",
     "@wix/stores": "^1.0.409",
+    "dompurify": "^3.2.5",
+    "js-cookie": "^3.0.5",
+    "jsdom": "^26.0.0",
     "next": "14.2.2",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^5.5.0"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
+    "@types/jsdom": "^21.1.7",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
