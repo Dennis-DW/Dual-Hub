@@ -5,28 +5,17 @@ import { myWixClientServer } from '@/lib/wixClientServer';
 import { products } from '@wix/stores';
 import { JSDOM } from 'jsdom';
 import createDOMPurify from 'dompurify';
+import { Product, ProductListProps } from '@/types/productList.types';
+import {useTruncateText} from '@/hooks/useTruncateText'
 
 // Server-side DOMPurify setup
 const window = new JSDOM('').window;
 const DOMPurify = createDOMPurify(window);
 
-interface Product extends products.Product {
-  slug: string;
-  _id: string;
-}
 
-interface ProductListProps {
-  categoryId: string;
-  limit?: number;
-}
+export const ProductList = async ({ categoryId, limit, searchParams }: ProductListProps) => {
+const truncateToWords = useTruncateText();
 
-const truncateToWords = (text: string, wordLimit: number): string => {
-  const words = text?.split(' ') || [];
-  if (words.length <= wordLimit) return text;
-  return words.slice(0, wordLimit).join(' ') + '...';
-};
-
-export const ProductList = async ({ categoryId, limit }: ProductListProps) => {
   const wixClient = await myWixClientServer();
 
   try {

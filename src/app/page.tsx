@@ -2,8 +2,7 @@ import { ProductList } from "@/components/ProductList"
 import { Slider } from "@/components/Slider"
 import { CategoryList } from "@/components/CategoryList"
 import { Suspense } from "react"
-import { LoadingFallback } from "@/components/ LoadingFallback"
-
+import { LoadingFallback } from "@/components/LoadingFallback"
 
 
 const HomePage = async () => {
