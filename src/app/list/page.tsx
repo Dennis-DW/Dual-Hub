@@ -14,7 +14,7 @@ const ListPage = async ({ searchParams }: PageProps) => {
     );
 
     return (
-      <div className='px-4 md:px-8 lg:px-16 xl:32 2xl:px-64 relative'>
+      <div className="px-4 md:px-8 lg:px-16 xl:32 2xl:px-64 relative">
         <div className="hidden sm:flex justify-between items-center h-72 bg-gradient-to-r from-red-400 via-pink-500 to-purple-600 rounded-lg shadow-lg mx-4 mt-6 transform hover:scale-105 transition-transform duration-300">
           <div className="w-2/3 flex flex-col items-start justify-center gap-6 text-white p-6">
             <h1 className="text-4xl md:text-5xl font-bold leading-tight drop-shadow-lg">
@@ -26,7 +26,7 @@ const ListPage = async ({ searchParams }: PageProps) => {
           </div>
           <div className="relative w-1/3 h-full">
             <Image
-              src='/woman.png'
+              src="/woman.png"
               alt="Stylish woman"
               fill
               priority
@@ -42,14 +42,14 @@ const ListPage = async ({ searchParams }: PageProps) => {
 
         <h1 className="mt-12 text-2xl md:text-3xl font-semibold text-gray-800 tracking-wide text-center">
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-purple-600">
-            Tops For You
+            {category?.collection?.name || 'All Products'} For You
           </span>
         </h1>
 
         <Suspense fallback={<LoadingFallback />}>
           <ProductList
             categoryId={category.collection?._id || '00000000-000000-000000-000000000001'}
-            searchParams={JSON.stringify(searchParams)}
+            searchParams={searchParams} 
           />
         </Suspense>
       </div>

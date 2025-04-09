@@ -1,100 +1,98 @@
-// src/components/ProductList.tsx
-import Image from 'next/image';
-import Link from 'next/link';
-import { myWixClientServer } from '@/lib/wixClientServer';
-import { products } from '@wix/stores';
-import { JSDOM } from 'jsdom';
-import createDOMPurify from 'dompurify';
-import { Product, ProductListProps } from '@/types/productList.types';
-import {useTruncateText} from '@/hooks/useTruncateText'
+import { products } from '@wix/stores'
+import { JSDOM } from 'jsdom'
+import createDOMPurify from 'dompurify'
+import { Product, ProductListProps, SortOption, ParsedSearchParams, ProductType } from '@/types/search.types'
+import { useTruncateText } from '@/hooks/useTruncateText'
+import { myWixClientServer } from '@/lib/wixClientServer'
+import { ProductCard } from '@/components/ProductCard'
 
 // Server-side DOMPurify setup
-const window = new JSDOM('').window;
-const DOMPurify = createDOMPurify(window);
+const window = new JSDOM('').window
+const DOMPurify = createDOMPurify(window)
 
-
-export const ProductList = async ({ categoryId, limit, searchParams }: ProductListProps) => {
-const truncateToWords = useTruncateText();
-
+export const ProductList = async ({
+  categoryId,
+  limit,
+  searchParams,
+}: ProductListProps) => {
+  const truncateToWords = useTruncateText();
   const wixClient = await myWixClientServer();
+
+  const parsedParams: ParsedSearchParams = {
+    ...searchParams,
+    min: searchParams?.min ? Number(searchParams.min) : undefined,
+    max: searchParams?.max ? Number(searchParams.max) : undefined,
+    type: searchParams?.type as ProductType,
+    sort: searchParams?.sort as SortOption,
+  };
 
   try {
     if (!categoryId) {
       throw new Error('Category ID is required');
     }
 
-    const res = await wixClient.products
+    const productQuery = wixClient.products
       .queryProducts()
-      .eq('collectionIds', categoryId) 
-      .limit(limit || 20)
-      .find();
+      .startsWith('name', parsedParams.name || '')
+      .hasSome('productType', [parsedParams.type || 'physical', 'digital'])
+      .gt('priceData.price', parsedParams.min || 0)
+      .lt('priceData.price', parsedParams.max || 99999)
+      .eq('collectionIds', categoryId)
+      .limit(limit || 20);
+
+    const res = await productQuery.find();
 
     if (!res.items?.length) {
-      return <div>No products found in this category</div>;
+      return <div className="text-center py-8">No products found in this category</div>;
     }
 
-    // Pre-sanitize descriptions server-side
-    const sanitizedProducts = res.items.map((product: products.Product) => ({
+    let sanitizedProducts = res.items.map((product: products.Product) => ({
       ...product,
       slug: product.slug || 'default-slug',
-      _id: product._id || '', // Ensure _id is always present
+      _id: product._id || '',
       sanitizedDescription: DOMPurify.sanitize(
         truncateToWords(product.description || 'No description available', 10)
       ),
     }));
 
+    // Manual sorting
+    if (parsedParams.sort) {
+      const normalizedSort = parsedParams.sort.replace(/\+|\s+/, '_');
+      const [field, direction] = normalizedSort.split('_');
+
+      console.log(`Sort parsing: raw=${parsedParams.sort}, normalized=${normalizedSort}, field=${field}, direction=${direction}`);
+
+      if (field === 'price') {
+        sanitizedProducts.sort((a, b) => {
+          const priceA = a.priceData?.price || 0;
+          const priceB = b.priceData?.price || 0;
+          return direction === 'asc' ? priceA - priceB : priceB - priceA;
+        });
+      } else if (field === 'name') {
+        sanitizedProducts.sort((a, b) => {
+          const nameA = a.name || '';
+          const nameB = b.name || '';
+          return direction === 'asc' ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
+        });
+      }
+
+      console.log(`Manually sorted products (${field} ${direction}):`, 
+        sanitizedProducts.slice(0, 3).map(p => ({ name: p.name, price: p.priceData?.price })));
+    }
+
     return (
-      <div className="mt-12 flex gap-x-8 gap-y-16 justify-between flex-wrap">
-        {sanitizedProducts.map((product: Product & { sanitizedDescription: string }) => (
-          <Link
-            href={`/product/${product.slug}`}
-            className="w-full flex flex-col gap-4 sm:w-[45%] lg:w-[22%]"
-            key={product._id}
-          >
-            <div className="relative w-full h-80">
-              <Image
-                src={product.media?.mainMedia?.image?.url || '/product.png'}
-                alt={product.name || 'Product image'}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 45vw, 22vw"
-                className="object-cover absolute rounded-md z-10 hover:opacity-0 transition-opacity duration-500"
-              />
-              {product.media?.items?.[1] && (
-                <Image
-                  src={product.media.items[1].image?.url || '/product.png'}
-                  alt={`Secondary view of ${product.name || 'product'}`}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 45vw, 22vw"
-                  className="object-cover absolute rounded-md"
-                />
-              )}
-            </div>
-            <div className="flex justify-between">
-              <span className="font-medium">{product.name || 'Unnamed Product'}</span>
-              <span className="font-semibold">
-                {product.price?.price
-                  ? `$${product.price.price.toFixed(2)}`
-                  : 'Price not available'}
-              </span>
-            </div>
-            <div
-              className="text-sm text-gray-600"
-              dangerouslySetInnerHTML={{ __html: product.sanitizedDescription }}
-            />
-            <button
-              className="w-max rounded-2xl ring-1 ring-red-500 text-yellow-50 py-2 px-4 text-sm hover:bg-white hover:text-black transition-colors"
-              aria-label={`Add ${product.name || 'product'} to cart`}
-            >
-              Add to cart
-            </button>
-          </Link>
+      <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {sanitizedProducts.map((product) => (
+          <ProductCard key={product._id} product={product} />
         ))}
       </div>
     );
   } catch (error) {
     console.error('Error fetching products:', error);
     return (
-      <div className="text-red-500">Failed to load products. Please try again later.</div>
+      <div className="text-red-500 text-center py-8">
+        Failed to load products. Please try again later.
+      </div>
     );
   }
 };

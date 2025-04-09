@@ -18,18 +18,36 @@ export const SearchBar = () => {
   }
 
   return (
-    <form 
-      className='flex flex-1 justify-between gap-4 bg-white p-2 rounded-full shadow-md ring-1 ring-gray-300 hover:ring-gray-400 transition duration-300' 
+    <form
+      className='flex flex-1 justify-between items-center max-w-2xl mx-auto gap-3 
+                 bg-white/90 backdrop-blur-sm p-3 rounded-full 
+                 shadow-lg ring-1 ring-gray-200 
+                 hover:ring-2 hover:ring-pink-200 hover:shadow-blue-100
+                 transition-all duration-300 ease-in-out'
       onSubmit={handleSearch}
     >
-      <input 
+      <input
         type='text'
         name='name'
-        placeholder='Search...'
-        className='flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-500 px-4'
+        placeholder='Search anything...'
+        className='flex-1 bg-transparent outline-none text-gray-800 
+                   placeholder-gray-400 text-base px-4
+                   focus:placeholder-gray-300 transition-colors'
       />
-      <button className='cursor-pointer p-2 rounded-full bg-blue-500 hover:bg-blue-600 transition duration-300'>
-        <Image src={'/search.png'} alt='search' height={18} width={18} className='invert'/>
+      <button
+        className='cursor-pointer p-2.5 rounded-full
+                   bg-gradient-to-r from-blue-500 to-blue-600
+                   hover:from-blue-600 hover:to-blue-700
+                   active:scale-95 transform transition-all duration-200
+                   shadow-md hover:shadow-lg'
+      >
+        <Image
+          src={'/search.png'}
+          alt='search'
+          height={20}
+          width={20}
+          className='invert brightness-200'
+        />
       </button>
     </form>
   )

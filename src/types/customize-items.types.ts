@@ -1,4 +1,3 @@
-// src/types/customize-items.types.ts
 import { products } from '@wix/stores'
 
 export interface CustomizeItemsProps {

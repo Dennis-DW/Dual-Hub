@@ -8,5 +8,5 @@ export interface Product extends products.Product {
   export interface ProductListProps {
     categoryId: string;
     limit?: number;
-    searchParams?: string;
+    searchParams: { [key: string]: string | string[] | undefined };
   }
