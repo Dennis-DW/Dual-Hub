@@ -19,36 +19,38 @@ export const SearchBar = () => {
 
   return (
     <form
-      className='flex flex-1 justify-between items-center max-w-2xl mx-auto gap-3 
-                 bg-white/90 backdrop-blur-sm p-3 rounded-full 
-                 shadow-lg ring-1 ring-gray-200 
-                 hover:ring-2 hover:ring-pink-200 hover:shadow-blue-100
-                 transition-all duration-300 ease-in-out'
+      className='flex flex-1 justify-between items-center max-w-2xl mx-auto 
+                 bg-white border border-gray-300 rounded-full overflow-hidden
+                 hover:border-gray-400 focus-within:border-blue-500 focus-within:shadow-md
+                 transition-all duration-200'
       onSubmit={handleSearch}
     >
       <input
         type='text'
         name='name'
-        placeholder='Search anything...'
-        className='flex-1 bg-transparent outline-none text-gray-800 
-                   placeholder-gray-400 text-base px-4
-                   focus:placeholder-gray-300 transition-colors'
+        placeholder='Search'
+        className='flex-1 py-2 px-3 bg-transparent outline-none text-gray-900
+                   placeholder-gray-500 text-base
+                   focus:placeholder-gray-400'
       />
       <button
-        className='cursor-pointer p-2.5 rounded-full
-                   bg-gradient-to-r from-blue-500 to-blue-600
-                   hover:from-blue-600 hover:to-blue-700
-                   active:scale-95 transform transition-all duration-200
-                   shadow-md hover:shadow-lg'
+        className='px-6 py-2 bg-gray-100 hover:bg-gray-200
+                   border-l border-gray-300
+                   transition-colors duration-200
+                   flex items-center justify-center'
+        aria-label="Search"
       >
         <Image
-          src={'/search.png'}
+          src='/search.png'
           alt='search'
-          height={20}
           width={20}
-          className='invert brightness-200'
+          height={20}
+          className='opacity-60'
         />
       </button>
     </form>
   )
 }
+
+
+

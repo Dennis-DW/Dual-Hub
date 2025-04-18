@@ -15,6 +15,7 @@ const HomePage = async () => {
           <ProductList 
             categoryId={process.env.NEXT_PUBLIC_FEATURED_CLOTHES!} 
             limit={4} 
+            showPagination={false}
           />
         </Suspense>
       </section>
@@ -34,6 +35,7 @@ const HomePage = async () => {
           <ProductList 
             categoryId={process.env.NEXT_PUBLIC_NEW_CLOTHES!} 
             limit={8}
+            showPagination={false}
           />
         </Suspense>
       </section>
