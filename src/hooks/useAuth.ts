@@ -111,7 +111,7 @@ export const useAuth = ({
       // Show confirmation dialog
       const confirmLogout = window.confirm('Are you sure you want to log out?');
       if (!confirmLogout) {
-        return; // Exit if the user cancels the logout
+        return; 
       }
 
       if (setIsLoading) setIsLoading(true); // Check if setIsLoading is defined
