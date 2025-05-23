@@ -5,12 +5,14 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { CartModal } from './CartModal'
 import { useAuth } from '@/hooks/useAuth'
+import { useWixClient } from '@/hooks/useWixClient'
+import { useCartStore } from '@/hooks/useCart_store'
 
-interface NavIconsProps {
-    cartItemCount: number;
-}
+// interface NavIconsProps {
+//     cartItemCount: number;
+// }
 
-export default function NavIcons({ cartItemCount }: NavIconsProps) {
+export default function NavIcons() {
     const [isProfileOpen, setIsProfileOpen] = useState(false)
     const [isCartOpen, setIsCartOpen] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -38,6 +40,14 @@ export default function NavIcons({ cartItemCount }: NavIconsProps) {
         await logout()
         setIsLoggedIn(false) // Update state after logout
     }
+
+    const wixClient = useWixClient()
+
+    const { cart,counter, getCart } = useCartStore()
+
+    useEffect(() => {
+        getCart(wixClient)
+    }, [wixClient, getCart])
 
     return (
         <div className='flex items-center gap-6 relative text-gray-700'>
@@ -93,9 +103,9 @@ export default function NavIcons({ cartItemCount }: NavIconsProps) {
                     onClick={() => toggleState(setIsCartOpen)}
                     aria-label='Cart'
                 />
-                {cartItemCount > 0 && (
+                {counter > 0 && (
                     <div className='absolute -top-2 -right-2 w-5 h-5 bg-orange-600 rounded-full flex items-center justify-center text-white text-xs shadow-md'>
-                        {cartItemCount}
+                        {counter}
                     </div>
                 )}
                 {isCartOpen && (

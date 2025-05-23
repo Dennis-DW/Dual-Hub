@@ -1,5 +1,7 @@
 'use client'
 
+import { useCartStore } from '@/hooks/useCart_store'
+import { useWixClient } from '@/hooks/useWixClient'
 import React, { useState } from 'react'
 
 interface AddItemProps {
@@ -11,6 +13,7 @@ interface AddItemProps {
 export const AddItem = ({ productId, variantId, stockNumber }: AddItemProps) => {
   const [quantity, setQuantity] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
+  const wixClient = useWixClient()
 
   const handleQuantity = (type: 'i' | 'd') => {
     if (type === 'd' && quantity > 1) {
@@ -21,24 +24,15 @@ export const AddItem = ({ productId, variantId, stockNumber }: AddItemProps) => 
     }
   }
 
-  const handleAddToCart = async () => {
-    setIsLoading(true)
-    try {
-      // Add cart logic here
-    } catch (error) {
-      console.error('Failed to add item to cart:', error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
+  const {addItem} = useCartStore()
+   
   return (
     <div className='flex flex-col gap-4'>
       <h4 className='font-medium'>Choose a Quantity</h4>
       <div className='flex justify-between items-center'>
         <div className='flex items-center gap-4'>
           <div className='bg-slate-200 py-2 px-4 rounded-full flex items-center justify-between w-32'>
-            <button 
+            <button
               className='cursor-pointer text-xl hover:text-red-500 transition-colors'
               onClick={() => handleQuantity('d')}
               disabled={quantity <= 1}
@@ -47,7 +41,7 @@ export const AddItem = ({ productId, variantId, stockNumber }: AddItemProps) => 
               -
             </button>
             <span className='font-medium'>{quantity}</span>
-            <button 
+            <button
               className='cursor-pointer text-xl hover:text-red-500 transition-colors'
               onClick={() => handleQuantity('i')}
               disabled={quantity >= stockNumber}
@@ -67,8 +61,8 @@ export const AddItem = ({ productId, variantId, stockNumber }: AddItemProps) => 
           </div>
         )}
 
-        <button 
-          onClick={handleAddToCart}
+        <button
+          onClick={()=>addItem(wixClient,productId,variantId,quantity)}
           disabled={isLoading || stockNumber < 1}
           className='w-36 text-sm rounded-xl ring-1 ring-red-400 text-red-500 
                      py-2 px-4 hover:bg-red-400 hover:text-white transition-all

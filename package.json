@@ -13,6 +13,7 @@
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.16",
     "@types/dompurify": "^3.2.0",
+    "@wix/ecom": "^1.0.1153",
     "@wix/sdk": "^1.15.16",
     "@wix/stores": "^1.0.409",
     "dompurify": "^3.2.5",
@@ -25,7 +26,8 @@
     "react-error-boundary": "^5.0.0",
     "react-icons": "^5.5.0",
     "react-toastify": "^11.0.5",
-    "tw-elements-react": "^1.0.0-alpha-end"
+    "tw-elements-react": "^1.0.0-alpha-end",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",
